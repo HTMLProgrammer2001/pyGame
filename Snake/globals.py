@@ -1,0 +1,11 @@
+FPS = 10
+
+W = 400
+H = 400
+
+BG = (0, 0, 0)
+APPLE_COLOR = (255, 0, 0)
+SNAKE_COLOR = (0, 255, 0)
+BORDER_COLOR = (255, 255, 255)
+
+EVENT_APPLE_ADD = 1
