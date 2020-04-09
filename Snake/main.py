@@ -1,51 +1,49 @@
 import pygame
 from pygame.locals import *
-from random import randint
 
 from globals import *
-from Classes.Board import Board
-from Classes.Snake import Snake
-from Classes.Apple import Apple
+from Classes.Game import Game
 
 pygame.init()
 
 #variables
 sc = pygame.display.set_mode((W, H))
-snake = Snake()
-board = Board(snake)
 clock = pygame.time.Clock()
+game = Game()
 
 
 pygame.display.set_caption('Snake')
 
-pygame.time.set_timer(EVENT_APPLE_ADD, 5000)
-
 
 while 1:
-	board.update()
-	board.draw(sc)
+	events = pygame.event.get()
+
+	sc.fill(BG)
+
+	game.update()
+	game.draw(sc)
 
 	pygame.display.update()
 
-	events = pygame.event.get()
 	for event in events:
 		if(event.type == QUIT):
 			exit()
 
 		if(event.type == KEYDOWN):
 			if(event.key == K_DOWN):
-				snake.changeDir(0, 1)
+				game.snake.changeDir(0, 1)
 
 			if(event.key == K_UP):
-				snake.changeDir(0, -1)
+				game.snake.changeDir(0, -1)
 
 			if(event.key == K_LEFT):
-				snake.changeDir(-1, 0)
+				game.snake.changeDir(-1, 0)
 
 			if(event.key == K_RIGHT):
-				snake.changeDir(1, 0)
+				game.snake.changeDir(1, 0)
 
-		if(event.type == EVENT_APPLE_ADD):
-			board.addApple(Apple(randint(0, W), randint(0, H)))
+			if(event.key == K_ESCAPE):
+				game.changeStatus()
+			
 
 	clock.tick(FPS)

@@ -10,7 +10,9 @@ class Apple:
 			'y': y
 		}
 
-		self.size = 10
+		self.size = APPLE_SIZE
+
+		self.rect = pygame.Rect(self.pos['x'], self.pos['y'], self.size, self.size)
 
 	def draw(self, sc):
-		pygame.draw.rect(sc, APPLE_COLOR, pygame.Rect(self.pos['x'], self.pos['y'], self.size, self.size))
+		pygame.draw.rect(sc, APPLE_COLOR, self.rect)
