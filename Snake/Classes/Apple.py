@@ -3,8 +3,10 @@ from pygame.locals import *
 
 from globals import *
 
-class Apple:
+class Apple(pygame.sprite.Sprite):
 	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+		
 		self.pos = {
 			'x': x,
 			'y': y

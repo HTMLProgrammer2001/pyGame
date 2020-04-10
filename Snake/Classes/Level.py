@@ -23,6 +23,7 @@ class Level:
 
 	def loadBlocks(self, level):
 		fileName = join(LEVELS_DIR, str(level) + '.txt')
+		self.levelExist = isfile(fileName)
 
 		result = []
 
@@ -41,3 +42,6 @@ class Level:
 					levelBlocks.append(LevelBlock(x * BLOCK_SIZE, y * BLOCK_SIZE, self.group))
 
 		return levelBlocks
+
+	def checkCollisionWith(self, sprite):
+		return bool(pygame.sprite.spritecollideany(sprite, self.group))
