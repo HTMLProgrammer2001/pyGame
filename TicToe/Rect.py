@@ -30,6 +30,8 @@ class Rect:
 
 	def setPlayer(self, player):
 		if(self.select):
-			return
+			return False
 
 		self.select = player
+
+		return True

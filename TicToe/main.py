@@ -13,15 +13,11 @@ sc = pygame.display.set_mode((W, H))
 board = Board()
 isStop = False
 
-def showWinner():
-	global isStop
-
-	isStop = True
-
+def showMessage(sc, msg):
 	sc.fill(BG)
 
 	font = pygame.font.SysFont('Arial', 48)
-	fontSurf = font.render('Player {} win'.format(player), 1, BORDER)
+	fontSurf = font.render(msg, 1, BORDER)
 	fontRect = fontSurf.get_rect(center=(W//2, H//2))
 
 	sc.blit(fontSurf, fontRect)
@@ -44,12 +40,15 @@ while 1:
 			if(isStop):
 				continue
 
-			board.click(event.pos, player)
+			if(board.click(event.pos, player)):
+				if(board.checkWin()):
+					isStop = True
+					showMessage(sc, 'Player {} win'.format(player))
+				elif(board.checkDraw()):
+					isStop = True
+					showMessage(sc, 'Draw')
 
-			if(board.checkWin()):
-				showWinner()
-
-			player = 'X' if player == 'O' else 'O'
+				player = 'X' if player == 'O' else 'O'
 
 		if(event.type == KEYDOWN):
 			if(event.key == K_ESCAPE):

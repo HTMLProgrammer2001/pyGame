@@ -26,7 +26,7 @@ class Board:
 	def click(self, coords, player):
 		for i in range(0, 9):
 			if(self.rects[i].contains(coords)):
-				self.rects[i].setPlayer(player)
+				return self.rects[i].setPlayer(player)
 
 	def checkWin(self):
 		lines = [
@@ -48,3 +48,10 @@ class Board:
   				return True
 
 		return False
+
+	def checkDraw(self):
+		for elem in self.rects:
+			if(not elem.select):
+				return False
+
+		return True
