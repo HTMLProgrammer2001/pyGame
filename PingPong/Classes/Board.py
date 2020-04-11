@@ -1,6 +1,7 @@
 from globals import *
 from Classes.Player import Player
 from Classes.Ball import Ball
+from Classes.Audio import Audio
 
 import pygame
 from pygame.locals import *
@@ -14,6 +15,8 @@ class Board:
 
 		self.isMove = True
 		self.winner = None
+
+		self.audio = Audio()
 
 	def update(self):
 		if(not self.isMove):
@@ -38,16 +41,20 @@ class Board:
 
 			#checkWin
 			if(self.player1.score >= 3):
+				self.audio.win()
 				self.winner = 'Player 1'
 
 			if(self.player2.score >= 3):
+				self.audio.win()
 				self.winner = 'Player 2'
 
 		#hits in players
 		if(self.player1.rect.colliderect(self.ball.rect)):
 			self.ball.changeDir(dx = 1)
+			self.audio.bit()
 
 		if(self.player2.rect.colliderect(self.ball.rect)):
+			self.audio.bit()
 			self.ball.changeDir(dx = -1)
 
 	def draw(self, sc):
