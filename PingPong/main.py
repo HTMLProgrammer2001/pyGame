@@ -6,6 +6,8 @@ from pygame.locals import *
 from Classes.Board import Board
 from globals import *
 
+pygame.init()
+
 #variables
 pyTime = pygame.time.Clock()
 initializeTime = time.time()
@@ -30,7 +32,7 @@ def onKeyDown(event):
         board.player2.changeDir(False)
 
     if(event.key == K_ESCAPE):
-        board.restart()
+        board.unpause()
 
 def onKeyUp(event):
     if(event.key in [K_DOWN, K_UP]):

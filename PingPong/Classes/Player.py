@@ -1,6 +1,6 @@
 from globals import *
 
-from pygame import draw
+from pygame import draw, Rect
 
 class Player:
 	def __init__(self, x, y, speed = 5):
@@ -12,40 +12,24 @@ class Player:
 		self.speed = 5
 		self.dir = 0
 
+		self.score = 0
+
 		self.size = {
 			'width': 3,
 			'height': 80
 		}
 
-	def getCoords(self):
-		return {
-			'TOP_LEFT': {
-				'x': self.x,
-				'y': self.y
-			},
-			'TOP_RIGHT': {
-				'x': self.x + self.size['width'],
-				'y': self.y
-			},
-			'BOTTOM_LEFT': {
-				'x': self.x,
-				'y': self.y + self.size['height']
-			},
-			'BOTTOM_RIGHT': {
-				'x': self.x + self.size['width'],
-				'y': self.y + self.size['height']
-			}
-		}
+		self.rect = Rect((x, y, self.size['width'], self.size['height']))
 
 
 	def update(self):
-		self.y += self.speed * self.dir
+		self.rect.move_ip(0, self.speed * self.dir)
 
-		if(self.y < 0):
-			self.y = 0
+		if(self.rect.y < 0):
+			self.rect.y = 0
 
-		if(self.y > H - self.size['height']):
-			self.y = H - self.size['height']
+		if(self.rect.y > H - self.size['height']):
+			self.rect.y = H - self.size['height']
 
 	def stop(self):
 		self.dir = 0
@@ -56,6 +40,12 @@ class Player:
 		else:
 			self.dir = 1
 
+	def goal(self):
+		self.score += 1
+
+	def move(self, x, y):
+		self.rect.x = x
+		self.rect.y = y
+
 	def draw(self, sc):
-		draw.rect(sc, self.color, (
-			self.x, self.y, self.size['width'], self.size['height']))
+		draw.rect(sc, self.color, self.rect)

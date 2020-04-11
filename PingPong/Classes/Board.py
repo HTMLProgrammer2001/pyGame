@@ -13,9 +13,9 @@ class Board:
 		self.player2 = Player(W - 8, H//2 - 40)
 
 		self.isMove = True
+		self.winner = None
 
 	def update(self):
-
 		if(not self.isMove):
 			return
 
@@ -23,38 +23,79 @@ class Board:
 		self.player1.update()
 		self.player2.update()
 
-		ballCoords = self.ball.getCoords()
-		playerCoords1 = self.player1.getCoords()
-		playerCoords2 = self.player2.getCoords()
-
 		#ball out of board
-		if(ballCoords['TOP_LEFT']['x'] < 0 or ballCoords['TOP_RIGHT']['x'] > W):
-			self.stop()
+		if(self.ball.rect.x < 0 or self.ball.rect.right > W):
+			if(self.ball.rect.x < 0):
+				self.player2.goal()
+			elif(self.ball.rect.right > W):
+				self.player1.goal()
 
+			#update state
+			self.stop()
+			self.ball = Ball(W//2, H//2)
+			self.player1.move(5, H//2 - 40)
+			self.player2.move(W - 8, H//2 - 40)
+
+			#checkWin
+			if(self.player1.score >= 3):
+				self.winner = 'Player 1'
+
+			if(self.player2.score >= 3):
+				self.winner = 'Player 2'
 
 		#hits in players
-		if(ballCoords['TOP_LEFT']['x'] <= playerCoords1['TOP_RIGHT']['x'] and
-			playerCoords1['BOTTOM_LEFT']['y'] > ballCoords['TOP_LEFT']['y'] > playerCoords1['TOP_LEFT']['y']):
-				self.ball.changeDir(dx = 1)
+		if(self.player1.rect.colliderect(self.ball.rect)):
+			self.ball.changeDir(dx = 1)
 
-		if(ballCoords['TOP_RIGHT']['x'] >= playerCoords2['TOP_LEFT']['x'] and
-			playerCoords2['BOTTOM_LEFT']['y'] > ballCoords['TOP_LEFT']['y'] > playerCoords2['TOP_LEFT']['y']):
-				self.ball.changeDir(dx = -1)
+		if(self.player2.rect.colliderect(self.ball.rect)):
+			self.ball.changeDir(dx = -1)
 
 	def draw(self, sc):
-		sc.fill((255, 255, 255))
+		if(self.winner):
+			sc.fill((255, 255, 255))
 
-		self.update()
+			self.drawMessage(sc, '{} win'.format(self.winner))
+			return
 
-		self.ball.draw(sc)
-		self.player1.draw(sc)
-		self.player2.draw(sc)
+		if(self.isMove):
+			sc.fill((255, 255, 255))
+
+			self.update()
+
+			self.ball.draw(sc)
+			self.player1.draw(sc)
+			self.player2.draw(sc)
+
+			self.drawScore(sc)	
+
+	def drawScore(self, sc):
+		font = pygame.font.SysFont('Arial', 24)
+		fontSurf = font.render(str(self.player1.score) + ':' + str(self.player2.score), 1, (0, 0, 0))
+		fontRect = fontSurf.get_rect(center = (W//2, 14))
+
+		sc.blit(fontSurf, fontRect)
+
+	def drawMessage(self, sc, msg):
+		font = pygame.font.SysFont('Arial', 36)
+		fontSurf = font.render(msg, 1, (0, 0, 0))
+		fontRect = fontSurf.get_rect(center = (W//2, H//2))
+
+		sc.blit(fontSurf, fontRect)
 
 	def stop(self):
 		self.isMove = False
 
 	def start(self):
 		self.isMove = True
+
+	def unpause(self):
+		if(self.winner):
+			self.restart()
+
+		if(self.isMove):
+			self.stop()
+		else:
+			self.start()
 
 	def restart(self):
 		self.ball = Ball(W//2, H//2)
@@ -63,3 +104,4 @@ class Board:
 		self.player2 = Player(W - 8, H//2 - 40)
 
 		self.isMove = True
+		self.winner = None
