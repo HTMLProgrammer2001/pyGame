@@ -1,0 +1,24 @@
+#screen sizes
+W = 800
+H = 600
+SCREEN = (W, H)
+
+FPS = 60
+
+#player
+PLAYER_WIDTH = 80
+PLAYER_HEIGHT = 5
+PLAYER_SPEED = 5
+PLAYER_COLOR = (255, 0, 0)
+
+#ball
+BALL_SIZE = 10
+BALL_COLOR = (0, 255, 0)
+BALL_MIN_SPEED = 3
+
+#board
+BOARD_COLOR = (0, 0, 0)
+
+#colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
