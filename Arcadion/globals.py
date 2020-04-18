@@ -17,7 +17,15 @@ BALL_COLOR = (0, 255, 0)
 BALL_MIN_SPEED = 3
 
 #blocks
-BLOCK_COLOR = (255, 0, 0)
+BLOCK_COLORS = [
+	None,
+	(255, 0, 0),
+	(255, 255, 0),
+	(255, 255, 255),
+	(255, 120, 0),
+	(255, 0, 120),
+	(127, 127, 127)
+]
 BLOCK_WIDTH = 60
 BLOCK_HEIGHT = 20
 BLOCK_GAP = 5

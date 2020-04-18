@@ -12,6 +12,7 @@ class Board:
 	def __init__(self, level = 1):
 		#init level
 		self.level = Level(level)
+		self.curLevel = level
 
 		#isFail
 		self.isFail = False
@@ -36,12 +37,17 @@ class Board:
 		collideSprite = self.level.checkCollisionWith(self.ball)
 		if(collideSprite):
 			self.ball.changeDir(y = True)
-			collideSprite.kill()
+			collideSprite.damage()
 
 		self.ball.update()
 
+		#user loose
 		if(self.ball.rect.bottom > H):
 			self.isFail = True
+
+		#level passed
+		if(not self.level.group.sprites()):
+			self.nextLevel()
 
 	def draw(self, sc):
 		if(self.isFail):
@@ -61,3 +67,9 @@ class Board:
 
 	def restart(self):
 		pass
+
+	def nextLevel(self):
+		print(1)
+
+		self.curLevel += 1
+		self.level = Level(self.curLevel)
