@@ -14,8 +14,9 @@ class Board:
 		self.level = Level(level)
 		self.curLevel = level
 
-		#isFail
+		#status variables
 		self.isFail = False
+		self.isStop = False
 
 		#init game elements
 		self.player = Player(W//2 - PLAYER_WIDTH//2)
@@ -24,7 +25,7 @@ class Board:
 		self.boardSurf = pygame.Surface(SCREEN)
 
 	def update(self):
-		if(self.isFail):
+		if(self.isFail or self.isStop):
 			return
 
 		self.player.update()
@@ -50,7 +51,7 @@ class Board:
 			self.nextLevel()
 
 	def draw(self, sc):
-		if(self.isFail):
+		if(self.isFail or self.isStop):
 			return
 
 		#fill board
@@ -65,11 +66,14 @@ class Board:
 
 		sc.blit(self.boardSurf, (0, 0))
 
-	def restart(self):
-		pass
+	def changeStatus(self):
+		if(not self.isFail):
+			self.isStop = not self.isStop
+
+		else:
+			self.__init__()
 
 	def nextLevel(self):
-		print(1)
-
+		#go to the next level
 		self.curLevel += 1
 		self.level = Level(self.curLevel)

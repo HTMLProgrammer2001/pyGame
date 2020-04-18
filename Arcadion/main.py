@@ -46,7 +46,7 @@ while 1:
 				board.player.changeDir(1)
 
 			if(event.key == K_ESCAPE):
-				board = Board()
+				board.changeStatus()
 
 		if(event.type == KEYUP):
 			board.player.changeDir(0)
