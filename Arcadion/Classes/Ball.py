@@ -4,8 +4,10 @@ from random import random
 
 from globals import *
 
-class Ball:
+class Ball(pygame.sprite.Sprite):
 	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+
 		#size 
 		self.size = BALL_SIZE
 
@@ -42,3 +44,13 @@ class Ball:
 		#draw on screen
 		sc.blit(self.surface, self.rect)
 
+	def checkCollisionWith(self, rect):
+		return self.rect.colliderect(rect)
+
+	def changeDir(self, x = False, y = False):
+		#change direction of ball
+		if(x):
+			self.dir['x'] *= -1
+
+		if(y):
+			self.dir['y'] *= -1

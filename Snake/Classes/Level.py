@@ -37,7 +37,7 @@ class Level:
 		levelBlocks = []
 
 		for y in range(0, len(blocks) - 1):
-			for x in range(0, len(blocks) - 1):
+			for x in range(0, len(blocks[y]) - 1):
 				if(blocks[y][x]):
 					levelBlocks.append(LevelBlock(x * BLOCK_SIZE, y * BLOCK_SIZE, self.group))
 

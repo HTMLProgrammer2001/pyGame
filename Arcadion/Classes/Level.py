@@ -35,12 +35,13 @@ class Level:
 	def convertToBlocks(self, blocks):
 		levelBlocks = []
 
-		for y in range(0, len(blocks) - 1):
-			for x in range(0, len(blocks) - 1):
+		for y in range(0, len(blocks)):
+			for x in range(0, len(blocks[y])):
 				if(blocks[y][x]):
-					levelBlocks.append(LevelBlock(x * BLOCK_SIZE, y * BLOCK_SIZE, self.group))
+					levelBlocks.append(LevelBlock(x * (BLOCK_WIDTH + BLOCK_GAP) + BLOCK_GAP, 
+						y * (BLOCK_HEIGHT + BLOCK_GAP) + BLOCK_GAP, blocks[y][x], self.group))
 
 		return levelBlocks
 
 	def checkCollisionWith(self, sprite):
-		return bool(pygame.sprite.spritecollideany(sprite, self.group))
+		return pygame.sprite.spritecollideany(sprite, self.group)

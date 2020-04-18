@@ -45,6 +45,9 @@ while 1:
 				#player move left
 				board.player.changeDir(1)
 
+			if(event.key == K_ESCAPE):
+				board = Board()
+
 		if(event.type == KEYUP):
 			board.player.changeDir(0)
 
