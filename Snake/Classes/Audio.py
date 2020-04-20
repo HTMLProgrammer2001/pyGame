@@ -6,8 +6,8 @@ class Audio:
 		pygame.mixer.music.play(-1)
 
 		self.failSound = pygame.mixer.Sound('music/fail.ogg')
-		self.foodSound = pygame.mixer.Sound('./music/food.ogg')
-		self.passedSound = pygame.mixer.Sound('./music/passed.ogg')
+		self.foodSound = pygame.mixer.Sound('music/food.ogg')
+		self.passedSound = pygame.mixer.Sound('music/passed.ogg')
 
 	def pause(self):
 		pygame.mixer.music.pause()

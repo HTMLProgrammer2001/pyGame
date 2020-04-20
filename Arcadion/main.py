@@ -5,51 +5,53 @@ from globals import *
 
 from Classes.Board import Board
 
-#init pygame
+# init pygame
 pygame.init()
 
-#create window
+# create window
 sc = pygame.display.set_mode(SCREEN)
 sc.fill(WHITE)
 
 clock = pygame.time.Clock()
 
-#create board
+# create board
 board = Board()
 
-#set caption
-pygame.display.set_caption('Arcadion')
+# set caption
+pygame.display.set_caption('Arcanoid')
 
-#game loop
+# game loop
 while 1:
-	board.update()
-	board.draw(sc)
+    board.update()
+    board.draw(sc)
 
-	#redraw screen
-	pygame.display.update()
+    # redraw screen
+    pygame.display.update()
 
-	#handle events
-	events = pygame.event.get()
+    # handle events
+    events = pygame.event.get()
 
-	for event in events:
-		#exit
-		if(event.type == QUIT):
-			exit()
+    for event in events:
+        # exit
+        if event.type == QUIT:
+            exit()
 
-		if(event.type == KEYDOWN):
-			if(event.key == K_LEFT):
-				#player move left
-				board.player.changeDir(-1)
+        if event.type == KEYDOWN:
+            if event.key == K_LEFT:
+                # player move left
+                board.player.changeDir(-1)
 
-			if(event.key == K_RIGHT):
-				#player move left
-				board.player.changeDir(1)
+            if event.key == K_RIGHT:
+                # player move left
+                board.player.changeDir(1)
 
-			if(event.key == K_ESCAPE):
-				board.changeStatus()
+            if event.key == K_ESCAPE:
+                board.changeStatus()
 
-		if(event.type == KEYUP):
-			board.player.changeDir(0)
+            if event.key == K_SPACE:
+                board.initBall()
 
+        if event.type == KEYUP and event.key in [K_LEFT, K_RIGHT]:
+            board.player.changeDir(0)
 
-	clock.tick(FPS)		
+    clock.tick(FPS)
