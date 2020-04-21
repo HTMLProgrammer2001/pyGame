@@ -1,57 +1,44 @@
 import pygame
+import sys
 from pygame.locals import *
 
-from Rect import Rect
-from Board import Board
+from Classes.Games.OnlineGame import OnlineGame
 from globals import *
 
 pygame.init()
 
-#var
-player = 'X'
+# var
 sc = pygame.display.set_mode((W, H))
-board = Board()
-isStop = False
+game = OnlineGame()
 
-def showMessage(sc, msg):
-	sc.fill(BG)
+game.search()
 
-	font = pygame.font.SysFont('Arial', 48)
-	fontSurf = font.render(msg, 1, BORDER)
-	fontRect = fontSurf.get_rect(center=(W//2, H//2))
-
-	sc.blit(fontSurf, fontRect)
 
 while 1:
-	if(not isStop):
-		sc.fill(BG)
-		board.draw(sc)
-		pygame.draw.rect(sc, BORDER, (0, 0, W, H), 10)
+    game.draw(sc)
 
-	pygame.display.update()
+    pygame.display.update()
 
-	events = pygame.event.get()
+    events = pygame.event.get()
 
-	for event in events:
-		if(event.type == QUIT):
-			exit()
+    for event in events:
+        if event.type == QUIT:
+            pygame.quit()
 
-		if(event.type == MOUSEBUTTONDOWN):
-			if(isStop):
-				continue
+            # close socket
+            if game:
+                game.quit()
 
-			if(board.click(event.pos, player)):
-				if(board.checkWin()):
-					isStop = True
-					showMessage(sc, 'Player {} win'.format(player))
-				elif(board.checkDraw()):
-					isStop = True
-					showMessage(sc, 'Draw')
+            sys.exit()
 
-				player = 'X' if player == 'O' else 'O'
+        if event.type == MOUSEBUTTONDOWN:
+            game.clickBoard(event.pos)
 
-		if(event.type == KEYDOWN):
-			if(event.key == K_ESCAPE):
-				if(isStop):
-					board = Board()
-					isStop = False
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                if game.winner:
+                    game = OnlineGame()
+
+                    game.search()
+                else:
+                    game.toggleStatus()
