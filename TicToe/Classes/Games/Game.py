@@ -12,6 +12,7 @@ class Game:
         self.isPause = False
         self.isDraw = False
         self.winner = None
+        self.msg = ''
 
         self.board = Board()
 
@@ -20,7 +21,9 @@ class Game:
         self.board.draw(sc)
         pygame.draw.rect(sc, BORDER_COLOR, (0, 0, W, H), 10)
 
-        if self.isPause:
+        if self.msg:
+            self.showMessage(sc, self.msg, True)
+        elif self.isPause:
             self.showMessage(sc, 'Paused'.upper(), True)
         elif self.isDraw:
             self.showMessage(sc, 'Draw'.upper(), True)
@@ -32,7 +35,7 @@ class Game:
         if fill:
             sc.fill(BG)
 
-        font = pygame.font.SysFont('Arial', 48)
+        font = pygame.font.SysFont('Arial', 40)
         fontSurf = font.render(msg, 1, TEXT_COLOR)
         fontRect = fontSurf.get_rect(center=(W // 2, H // 2))
 

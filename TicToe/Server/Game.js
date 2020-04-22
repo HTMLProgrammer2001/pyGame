@@ -33,7 +33,10 @@ class Game{
             this.curPlayer = 'O';
         }
 
-        this.emitBoth('moved', this.board);
+        this.emitBoth('moved', {
+            fields: this.board,
+            player: this.curPlayer == 'O' ? 'X' : 'O'
+        });
 
         return true;
     }
