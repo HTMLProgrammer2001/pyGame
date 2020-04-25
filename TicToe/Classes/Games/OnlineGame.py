@@ -14,7 +14,7 @@ class OnlineGame(Game):
         self.sio.on('start', self.start)
         self.sio.on('moved', self.moved)
         self.sio.on('win', self.win)
-        self.sio.on('draw', self.draw)
+        self.sio.on('draw', self.setDraw)
         self.sio.on('quit', self.enemyLeave)
 
     def moved(self, data):
@@ -24,7 +24,7 @@ class OnlineGame(Game):
     def start(self, gameID):
         self.gameID = gameID
 
-    def draw(self, *args):
+    def setDraw(self, *args):
         self.isDraw = True
 
     def win(self, winner):

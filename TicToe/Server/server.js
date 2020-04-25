@@ -4,12 +4,35 @@ const Game = require('./Game');
 
 let clients = [],
     waitClient = null,
+    friendSearch = [],
     games = [];
 
 io.on('connection', (socket) => {
     //add to clients
     clients.push(socket);
     console.log(`A ${socket.id} connected`);
+
+    socket.on('friend_start', () => {
+        console.log(`${socket.id} friend start`);
+
+        let sock = friendSearch.findIndex((e) => e.id == socket.id);
+
+        if(~sock)
+            return;
+
+        friendSearch.push(socket);
+    });
+
+    socket.on('friend_find', (id) => {
+        console.log('Find ' + id);
+
+        let sock = friendSearch.find((e) => e.id == id);
+
+        if(!sock)
+            return;
+
+        games.push(new Game(socket, sock));
+    });
 
     socket.on('search', () => {
         //if server has not free client than this client will wait

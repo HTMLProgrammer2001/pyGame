@@ -4,13 +4,15 @@ from pygame.locals import *
 
 from Classes.Games.OnlineGame import OnlineGame
 from Classes.Games.OfflineGame import OfflineGame
+from Classes.Games.OnlineFriendGame import OnlineWithFriend
 from Classes.Menu import Menu
 from globals import *
+
 
 pygame.init()
 
 # var
-menuItems = ['Offline', 'Online with random player', 'Exit']
+menuItems = ['Offline', 'Online with random player', 'Online with friend', 'Exit']
 sc = pygame.display.set_mode((W, H))
 menu = Menu(menuItems)
 isRun = False
@@ -25,9 +27,12 @@ while 1:
     else:
         game.draw(sc)
 
+    events = pygame.event.get()
+
     pygame.display.update()
 
-    events = pygame.event.get()
+    if game:
+        game.update(events)
 
     for event in events:
         if event.type == QUIT:
@@ -54,8 +59,12 @@ while 1:
                     game = OnlineGame()
                     game.search()
                     isRun = True
-                # quit selected
+                # online with friend selected
                 elif menuItem == menuItems[2]:
+                    game = OnlineWithFriend()
+                    isRun = True
+                # quit selected
+                elif menuItem == menuItems[3]:
                     pygame.quit()
                     sys.exit()
             # we play now

@@ -55,3 +55,6 @@ class Game:
 
     def quit(self):
         pass
+
+    def update(self, *args):
+        pass
