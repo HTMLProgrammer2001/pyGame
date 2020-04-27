@@ -8,6 +8,7 @@ from Classes.LevelBlock import LevelBlock
 # boosters
 from Classes.Boosters.Long import LongBooster
 from Classes.Boosters.Power import PowerBooster
+from Classes.Boosters.Balls import BallsBooster
 
 
 class Level:
@@ -35,7 +36,7 @@ class Level:
             while not block.canDamage:
                 block = choice(self.levelBlocks)
 
-            Booster = choice([LongBooster, PowerBooster])
+            Booster = choice([BallsBooster])
 
             self.boosters.append(Booster(block, self.boosterGroup))
 

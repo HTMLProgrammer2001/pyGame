@@ -11,8 +11,8 @@ class PowerBooster(Booster):
         # time of working
         self.timeout = 10
 
-        # attached ball
-        self.ball = None
+        # attached balls
+        self.balls = None
 
         # draw
         self.image = pygame.image.load('./image/powerBooster.png').convert_alpha()
@@ -24,24 +24,26 @@ class PowerBooster(Booster):
 
         sc.blit(self.image, self.rect)
 
-    def attach(self, ball):
-        # change ball
-        ball.power = 3
-        ball.speed['y'] *= 1.5
-        ball.speed['x'] *= 1.5
-        ball.color = RED
+    def attach(self, balls):
+        # change balls
+        for ball in balls:
+            ball.power = 3
+            ball.speed['y'] *= 1.5
+            ball.speed['x'] *= 1.5
+            ball.color = RED
 
         # attach ball
-        self.ball = ball
+        self.balls = balls
 
     def destroy(self):
-        if self.ball:
-            # change ball back
-            self.ball.power = 1
-            self.ball.speed['x'] /= 1.5
-            self.ball.speed['y'] /= 1.5
-            self.ball.color = BALL_COLOR
+        if self.balls:
+            for ball in self.balls:
+                # change ball back
+                ball.power = 1
+                ball.speed['x'] /= 1.5
+                ball.speed['y'] /= 1.5
+                ball.color = BALL_COLOR
 
-            self.ball = None
+            self.balls = None
 
         self.kill()
