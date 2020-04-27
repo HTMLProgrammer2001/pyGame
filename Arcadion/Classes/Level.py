@@ -36,7 +36,7 @@ class Level:
             while not block.canDamage:
                 block = choice(self.levelBlocks)
 
-            Booster = choice([BallsBooster])
+            Booster = choice([BallsBooster, LongBooster, PowerBooster])
 
             self.boosters.append(Booster(block, self.boosterGroup))
 
