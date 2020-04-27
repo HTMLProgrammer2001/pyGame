@@ -7,6 +7,7 @@ from Classes.LevelBlock import LevelBlock
 
 # boosters
 from Classes.Boosters.Long import LongBooster
+from Classes.Boosters.Power import PowerBooster
 
 
 class Level:
@@ -34,13 +35,16 @@ class Level:
             while not block.canDamage:
                 block = choice(self.levelBlocks)
 
-            self.boosters.append(LongBooster(block, self.boosterGroup))
+            Booster = choice([LongBooster, PowerBooster])
+
+            self.boosters.append(Booster(block, self.boosterGroup))
 
     def draw(self, sc):
-        self.group.draw(sc)
         self.boosterGroup.draw(sc)
+        self.group.draw(sc)
 
     def update(self):
+        self.boosterGroup.update()
         self.boosterGroup.update()
 
     def loadBlocks(self, level):
@@ -71,3 +75,6 @@ class Level:
 
     def checkCollisionWith(self, sprite):
         return pygame.sprite.spritecollideany(sprite, self.group)
+
+    def checkBoosterCollisionWith(self, sprite):
+        return pygame.sprite.spritecollideany(sprite, self.boosterGroup)

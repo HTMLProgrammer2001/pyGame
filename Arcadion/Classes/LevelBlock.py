@@ -37,7 +37,7 @@ class LevelBlock(pygame.sprite.Sprite):
             self.image.fill(BLOCK_COLORS[self.health])
 
     def destroy(self):
-        self.booster.show()
+        if hasattr(self, 'booster'):
+            self.booster.show()
+
         self.kill()
-
-

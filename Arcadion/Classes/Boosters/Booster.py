@@ -1,4 +1,5 @@
 import pygame
+from time import time
 
 from globals import *
 
@@ -13,6 +14,10 @@ class Booster(pygame.sprite.Sprite):
         # is block destroyed
         self.isShow = False
 
+        # time of working
+        self.timeout = 10
+        self.activateTime = None
+
         self.pos = block.rect.center
         self.speed = BOOSTER_SPEED
 
@@ -24,9 +29,18 @@ class Booster(pygame.sprite.Sprite):
 
         print('Show')
 
+    def activate(self):
+        if self.activateTime:
+            return
+
+        self.activateTime = time()
+
+    def isActive(self):
+        return self.activateTime + self.timeout >= time()
+
     def update(self):
         # is not destroy block
-        if not self.isShow:
+        if not self.isShow or self.activateTime:
             return
 
         # move

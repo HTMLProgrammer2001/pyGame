@@ -7,6 +7,9 @@ from Classes.Player import Player
 from Classes.Ball import Ball
 from Classes.Level import Level
 
+from Classes.Boosters.Long import LongBooster
+from Classes.Boosters.Power import PowerBooster
+
 
 class Board:
     def __init__(self, level=1):
@@ -19,6 +22,8 @@ class Board:
         self.isStop = False
         self.isWin = False
 
+        self.boosters = []
+
         # init game elements
         self.player = Player(W // 2 - PLAYER_WIDTH // 2)
         self.ball = Ball(self.player.rect.center)
@@ -30,27 +35,21 @@ class Board:
             return
 
         self.level.update()
-
         self.player.update()
 
         # collide with player
-        if self.ball.checkCollisionWith(self.player.rect):
-            self.ball.changeDir(y=True)
-            self.ball.changeSpeedY()
-
-            if self.player.dir == self.ball.dir['x']:
-                self.ball.changeSpeedX()
-            elif self.player.dir != 0:
-                self.ball.changeSpeedX(False)
+        self.collidePlayer()
 
         # collide with blocks
-        collideSprite = self.level.checkCollisionWith(self.ball)
-        if collideSprite:
-            # ball change speed and direction
-            self.ball.changeDir(y=True)
-            self.ball.changeSpeedY()
+        self.collideBlocks()
 
-            collideSprite.damage()
+        # collide with boosters
+        self.collideBoosters()
+
+        for booster in self.boosters:
+            if not booster.isActive():
+                booster.destroy()
+                self.boosters.remove(booster)
 
         self.ball.update()
 
@@ -63,6 +62,47 @@ class Board:
 
         if not sprites or not list(filter(lambda sprite: sprite.canDamage, sprites)):
             self.nextLevel()
+
+    def collidePlayer(self):
+        if self.ball.checkCollisionWith(self.player.rect):
+            # ball bump into player
+            self.ball.changeDir(y=True)
+            self.ball.changeSpeedY()
+
+            # change angle by x
+            if self.player.dir == self.ball.dir['x']:
+                self.ball.changeSpeedX()
+            elif self.player.dir != 0:
+                self.ball.changeSpeedX(False)
+
+    def collideBlocks(self):
+        collideSprite = self.level.checkCollisionWith(self.ball)
+        if collideSprite:
+            # ball change speed and direction
+            self.ball.changeDir(y=True)
+            self.ball.changeSpeedY()
+
+            collideSprite.damage(self.ball.power)
+
+    def collideBoosters(self):
+        booster = self.level.checkBoosterCollisionWith(self.player)
+        if booster:
+            # remove from group
+            booster.remove(self.level.boosterGroup)
+
+            # add to active boosters
+            self.boosters.append(booster)
+
+            # activate
+            booster.activate()
+
+            # long player
+            if isinstance(booster, LongBooster):
+                booster.attach(self.player)
+
+            # power booster
+            if isinstance(booster, PowerBooster):
+                booster.attach(self.ball)
 
     def draw(self, sc):
         if self.isFail or self.isStop or self.isWin:

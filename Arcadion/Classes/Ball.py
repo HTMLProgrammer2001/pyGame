@@ -8,8 +8,9 @@ class Ball(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
 
-        # size
         self.size = BALL_SIZE
+        self.power = 1
+        self.color = BALL_COLOR
 
         # move
         self.isInit = False
@@ -49,7 +50,7 @@ class Ball(pygame.sprite.Sprite):
     def draw(self, sc):
         # clear
         self.surface.fill(BOARD_COLOR)
-        pygame.draw.circle(self.surface, BALL_COLOR, (self.size, self.size), self.size)
+        pygame.draw.circle(self.surface, self.color, (self.size, self.size), self.size)
 
         # draw on screen
         sc.blit(self.surface, self.rect)

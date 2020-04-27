@@ -44,4 +44,5 @@ LEVELS_DIR = './levels/'
 # colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
 TEXT_COLOR = (255, 255, 255)
