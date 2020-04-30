@@ -5,21 +5,14 @@ from Classes.Figures.Figure import Figure
 from globals import *
 
 
-class LongFigure(Figure):
+class RectFigure(Figure):
     def __init__(self):
         self.variants = [
             [
-                ['0', '0', '0', '0'],
-                ['0', '0', '0', '0'],
-                ['0', '0', '0', '0'],
-                ['1', '1', '1', '1']
+                ['1', '1', '1'],
+                ['1', '1', '1'],
+                ['1', '1', '1']
             ],
-            [
-                ['0', '1', '0', '0'],
-                ['0', '1', '0', '0'],
-                ['0', '1', '0', '0'],
-                ['0', '1', '0', '0']
-            ]
         ]
 
         self.cur = 0

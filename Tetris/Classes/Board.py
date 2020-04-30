@@ -1,13 +1,16 @@
 import pygame
-from random import randint
+from random import choice
 
 # my components
 from Classes.Figures.Long import LongFigure
+from Classes.Figures.Rect import RectFigure
+from Classes.Figures.TShape import TShapeFigure
+from Classes.Figures.Zigzag import ZigzagFigure
 from globals import *
 
 
 class Board:
-    def __init__(self, level=1):
+    def __init__(self):
         # status variables
         self.isFail = False
         self.isStop = False
@@ -16,7 +19,7 @@ class Board:
         self.score = 0
 
         # active figure
-        self.activeFigure = LongFigure()
+        self.activeFigure = self.generateFigure()
 
         # init board blocks
         self.blocks = pygame.sprite.Group()
@@ -32,13 +35,12 @@ class Board:
 
         if self.activeFigure.rect.bottom >= H:
             self.blocks.add(self.activeFigure.getSprites())
-            print('Low')
-            self.activeFigure = LongFigure()
+            self.activeFigure = self.generateFigure()
 
         for sprite in self.activeFigure.getSprites():
             if pygame.sprite.spritecollideany(sprite, self.blocks) is not None:
                 self.blocks.add(self.activeFigure.getSprites())
-                self.activeFigure = LongFigure()
+                self.activeFigure = self.generateFigure()
                 break
 
     def draw(self, sc):
@@ -68,6 +70,12 @@ class Board:
             sc.fill(BLACK)
 
         sc.blit(fontSurf, fontRect)
+
+    @staticmethod
+    def generateFigure():
+        figures = [LongFigure, TShapeFigure, ZigzagFigure, RectFigure]
+
+        return choice(figures)()
 
     def changeStatus(self):
         if not self.isFail:

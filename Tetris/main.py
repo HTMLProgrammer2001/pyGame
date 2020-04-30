@@ -46,6 +46,9 @@ while 1:
             if event.key == K_UP:
                 board.activeFigure.rotate()
 
+            if event.key == K_DOWN:
+                board.activeFigure.down()
+
             if event.key == K_ESCAPE:
                 board.changeStatus()
 

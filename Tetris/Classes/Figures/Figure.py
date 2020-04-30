@@ -46,6 +46,9 @@ class Figure:
         else:
             self.rect.move_ip(-BLOCK_SIZE, 0)
 
+    def down(self):
+        self.rect.move_ip(0, BLOCK_SIZE)
+
     def getSprites(self):
         newGroup = pygame.sprite.Group()
 
