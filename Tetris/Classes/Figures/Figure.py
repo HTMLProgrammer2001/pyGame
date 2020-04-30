@@ -1,5 +1,6 @@
 import pygame
 from random import choice
+from copy import copy
 
 from globals import *
 from Classes.Block import Block
@@ -7,18 +8,16 @@ from Classes.Block import Block
 
 class Figure:
     def __init__(self, x):
-        self.blocks = [
-            ['1', '1', '1'],
-            ['0', '1', '0'],
-            ['1', '1', '1']
-        ]
-
         self.blockGroup = pygame.sprite.Group()
 
-        self.surf = pygame.Surface((len(self.blocks[0]) * BLOCK_SIZE, len(self.blocks) * BLOCK_SIZE))
-        self.rect = self.surf.get_rect(center=(x, - len(self.blocks) * BLOCK_SIZE * 2))
-
         self.color = choice(BLOCK_COLORS)
+
+        self.surf = pygame.Surface((len(self.blocks[0]) * BLOCK_SIZE, len(self.blocks) * BLOCK_SIZE))
+
+        y = (-(len(self.blocks) + 2)) * BLOCK_SIZE
+
+        self.rect = pygame.Rect((x, y),
+                                (len(self.blocks[0]) * BLOCK_SIZE, len(self.blocks) * BLOCK_SIZE))
 
         self.initBlocks()
 
@@ -32,9 +31,11 @@ class Figure:
         sc.blit(self.surf, self.rect)
 
     def initBlocks(self):
+        self.blockGroup.empty()
+
         for y, row in enumerate(self.blocks):
             for x, elem in enumerate(row):
-                if elem:
+                if elem == '1':
                     pos = (x * BLOCK_SIZE, y * BLOCK_SIZE)
 
                     Block(pos, self.color, self.blockGroup)
@@ -44,3 +45,13 @@ class Figure:
             self.rect.move_ip(BLOCK_SIZE, 0)
         else:
             self.rect.move_ip(-BLOCK_SIZE, 0)
+
+    def getSprites(self):
+        newGroup = pygame.sprite.Group()
+
+        for sprite in self.blockGroup.sprites():
+            newSprite = copy(sprite)
+            newSprite.rect = newSprite.rect.move(self.rect.left, self.rect.top)
+            newGroup.add(newSprite)
+
+        return newGroup

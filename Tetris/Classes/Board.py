@@ -2,7 +2,7 @@ import pygame
 from random import randint
 
 # my components
-from Classes.Figures.Figure import Figure
+from Classes.Figures.Long import LongFigure
 from globals import *
 
 
@@ -16,7 +16,10 @@ class Board:
         self.score = 0
 
         # active figure
-        self.activeFigure = Figure(randint(BLOCK_SIZE, W - BLOCK_SIZE))
+        self.activeFigure = LongFigure()
+
+        # init board blocks
+        self.blocks = pygame.sprite.Group()
 
         # init game elements
         self.boardSurf = pygame.Surface(SCREEN)
@@ -26,6 +29,17 @@ class Board:
             return
 
         self.activeFigure.update()
+
+        if self.activeFigure.rect.bottom >= H:
+            self.blocks.add(self.activeFigure.getSprites())
+            print('Low')
+            self.activeFigure = LongFigure()
+
+        for sprite in self.activeFigure.getSprites():
+            if pygame.sprite.spritecollideany(sprite, self.blocks) is not None:
+                self.blocks.add(self.activeFigure.getSprites())
+                self.activeFigure = LongFigure()
+                break
 
     def draw(self, sc):
         if self.isFail or self.isStop:
@@ -41,6 +55,7 @@ class Board:
         sc.blit(self.boardSurf, (0, 0))
 
         self.activeFigure.draw(sc)
+        self.blocks.draw(sc)
 
     @staticmethod
     def drawText(sc, text, fill=False):
