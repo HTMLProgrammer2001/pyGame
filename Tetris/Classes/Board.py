@@ -37,9 +37,25 @@ class Board:
             self.blocks.add(self.activeFigure.getSprites())
             self.activeFigure = self.generateFigure()
 
+            row = self.checkRow()
+            while row:
+                print(row)
+                self.destroyRow(row)
+                row = self.checkRow(row)
+
         for sprite in self.activeFigure.getSprites():
             if pygame.sprite.spritecollideany(sprite, self.blocks) is not None:
                 self.blocks.add(self.activeFigure.getSprites())
+
+                row = self.checkRow()
+                while row:
+                    print(row)
+                    self.destroyRow(row)
+                    row = self.checkRow(row)
+
+                if self.checkLoose():
+                    self.isFail = True
+
                 self.activeFigure = self.generateFigure()
                 break
 
@@ -59,6 +75,54 @@ class Board:
         self.activeFigure.draw(sc)
         self.blocks.draw(sc)
 
+    def changeStatus(self):
+        if not self.isFail:
+            self.isStop = not self.isStop
+
+        else:
+            self.__init__()
+
+    def checkLoose(self):
+        for sprite in self.blocks.sprites():
+            if sprite.rect.top < 0:
+                print(sprite.rect.top)
+                return True
+
+        return False
+
+    def checkRow(self, start=None):
+        start = H//BLOCK_SIZE - 1 if start is None else start
+
+        for y in range(start, 0, -1):
+            isFilled = True
+
+            for x in range(0, W//BLOCK_SIZE):
+                for sprite in self.blocks.sprites():
+                    if sprite.rect.collidepoint(x * BLOCK_SIZE + BLOCK_SIZE//2,
+                                                    y * BLOCK_SIZE + BLOCK_SIZE//2):
+                        break
+
+                else:
+                    isFilled = False
+
+            if isFilled:
+                return y
+
+        return False
+
+    def destroyRow(self, row):
+        # destroy from blocks
+        for x in range(0, W // BLOCK_SIZE):
+            for sprite in self.blocks.sprites():
+                if sprite.rect.collidepoint(x * BLOCK_SIZE + BLOCK_SIZE // 2,
+                                                row * BLOCK_SIZE + BLOCK_SIZE // 2):
+                    sprite.remove(self.blocks)
+
+        # fall down blocks
+        for sprite in self.blocks.sprites():
+            if sprite.rect.bottom < row * BLOCK_SIZE + BLOCK_SIZE//2:
+                sprite.rect.move_ip(0, BLOCK_SIZE)
+
     @staticmethod
     def drawText(sc, text, fill=False):
         font = pygame.font.SysFont('Arial', 36)
@@ -76,10 +140,3 @@ class Board:
         figures = [LongFigure, TShapeFigure, ZigzagFigure, RectFigure]
 
         return choice(figures)()
-
-    def changeStatus(self):
-        if not self.isFail:
-            self.isStop = not self.isStop
-
-        else:
-            self.__init__()
