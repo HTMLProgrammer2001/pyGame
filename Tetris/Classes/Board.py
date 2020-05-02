@@ -36,7 +36,7 @@ class Board:
 
         if self.activeFigure.rect.bottom >= H:
             self.blocks.add(self.activeFigure.getSprites())
-            self.activeFigure = self.generateFigure()
+            self.next()
 
             row = self.checkRow()
             while row:
@@ -55,7 +55,7 @@ class Board:
             if self.checkLoose():
                 self.isFail = True
 
-            self.activeFigure = self.generateFigure()
+            self.next()
 
     def draw(self, sc):
         if self.isFail or self.isStop:
@@ -74,6 +74,8 @@ class Board:
         self.blocks.draw(sc)
 
         self.drawScore(sc)
+
+        self.drawNext(sc)
 
     def drawScore(self, sc):
         font = pygame.font.SysFont('Arial', 24)
@@ -142,6 +144,14 @@ class Board:
     def next(self):
         self.activeFigure = self.nextFigure
         self.nextFigure = self.generateFigure()
+
+    def drawNext(self, sc):
+        nextSurface = pygame.Surface(self.nextFigure.surf.get_size())
+        self.nextFigure.draw(nextSurface, False)
+        nextSurface = pygame.transform.scale(nextSurface, (60, 60))
+        nextRect = nextSurface.get_rect(topright=(W - 10, 10))
+
+        sc.blit(nextSurface, nextRect)
 
     @staticmethod
     def drawText(sc, text, fill=False):

@@ -25,11 +25,14 @@ class Figure:
     def update(self):
         self.rect.move_ip(0, 3)
 
-    def draw(self, sc):
+    def draw(self, sc, withRect=True):
         self.surf.fill(BOARD_COLOR)
         self.blockGroup.draw(self.surf)
 
-        sc.blit(self.surf, self.rect)
+        if withRect:
+            sc.blit(self.surf, self.rect)
+        else:
+            sc.blit(self.surf, pygame.Rect((0, 0), (self.rect.width + 10, self.rect.height + 10)))
 
     def initBlocks(self):
         self.blockGroup.empty()
