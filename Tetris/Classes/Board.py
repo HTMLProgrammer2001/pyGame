@@ -19,6 +19,7 @@ class Board:
         self.score = 0
 
         # active figure
+        self.nextFigure = self.generateFigure()
         self.activeFigure = self.generateFigure()
 
         # init board blocks
@@ -43,21 +44,18 @@ class Board:
                 self.destroyRow(row)
                 row = self.checkRow(row)
 
-        for sprite in self.activeFigure.getSprites():
-            if pygame.sprite.spritecollideany(sprite, self.blocks) is not None:
-                self.blocks.add(self.activeFigure.getSprites())
+        if self.collideActive():
+            self.blocks.add(self.activeFigure.getSprites())
+            row = self.checkRow()
+            while row:
+                print(row)
+                self.destroyRow(row)
+                row = self.checkRow(row)
 
-                row = self.checkRow()
-                while row:
-                    print(row)
-                    self.destroyRow(row)
-                    row = self.checkRow(row)
+            if self.checkLoose():
+                self.isFail = True
 
-                if self.checkLoose():
-                    self.isFail = True
-
-                self.activeFigure = self.generateFigure()
-                break
+            self.activeFigure = self.generateFigure()
 
     def draw(self, sc):
         if self.isFail or self.isStop:
@@ -74,6 +72,15 @@ class Board:
 
         self.activeFigure.draw(sc)
         self.blocks.draw(sc)
+
+        self.drawScore(sc)
+
+    def drawScore(self, sc):
+        font = pygame.font.SysFont('Arial', 24)
+        fontSurf = font.render(str(self.score), 1, TEXT_COLOR)
+        fontRect = fontSurf.get_rect(topleft=(10, 10))
+
+        sc.blit(fontSurf, fontRect)
 
     def changeStatus(self):
         if not self.isFail:
@@ -123,9 +130,22 @@ class Board:
             if sprite.rect.bottom < row * BLOCK_SIZE + BLOCK_SIZE//2:
                 sprite.rect.move_ip(0, BLOCK_SIZE)
 
+        self.score += 10
+
+    def collideActive(self):
+        for sprite in self.activeFigure.getSprites():
+            if pygame.sprite.spritecollideany(sprite, self.blocks) is not None or sprite.rect.bottom > H:
+                return True
+
+        return False
+
+    def next(self):
+        self.activeFigure = self.nextFigure
+        self.nextFigure = self.generateFigure()
+
     @staticmethod
     def drawText(sc, text, fill=False):
-        font = pygame.font.SysFont('Arial', 36)
+        font = pygame.font.SysFont('Arial', 28)
         font.set_bold(True)
         fontSurf = font.render(text, 1, TEXT_COLOR, BLACK)
         fontRect = fontSurf.get_rect(center=(W//2, H//2))

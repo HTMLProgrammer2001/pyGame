@@ -40,14 +40,23 @@ while 1:
             if event.key == K_LEFT:
                 board.activeFigure.move(right=False)
 
+                if board.collideActive():
+                    board.activeFigure.move(right=True)
+
             if event.key == K_RIGHT:
                 board.activeFigure.move(right=True)
+
+                if board.collideActive():
+                    board.activeFigure.move(right=False)
 
             if event.key == K_UP:
                 board.activeFigure.rotate()
 
             if event.key == K_DOWN:
                 board.activeFigure.down()
+
+                if board.collideActive():
+                    board.activeFigure.up()
 
             if event.key == K_ESCAPE:
                 board.changeStatus()

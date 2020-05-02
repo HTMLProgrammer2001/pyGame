@@ -1,6 +1,7 @@
 import pygame
 from random import choice
 from copy import copy
+from math import ceil, floor
 
 from globals import *
 from Classes.Block import Block
@@ -42,12 +43,23 @@ class Figure:
 
     def move(self, right=True):
         if right:
+            for sprite in self.getSprites():
+                if sprite.rect.right + BLOCK_SIZE > W:
+                    return
+
             self.rect.move_ip(BLOCK_SIZE, 0)
         else:
+            for sprite in self.getSprites():
+                if sprite.rect.left - BLOCK_SIZE < 0:
+                    return
+
             self.rect.move_ip(-BLOCK_SIZE, 0)
 
     def down(self):
         self.rect.move_ip(0, BLOCK_SIZE)
+
+    def up(self):
+        self.rect.move_ip(0, -BLOCK_SIZE)
 
     def getSprites(self):
         newGroup = pygame.sprite.Group()
